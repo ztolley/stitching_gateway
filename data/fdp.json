@@ -1,0 +1,31 @@
+[
+  {
+    "dataType": "Fbr",
+    "fbrTruck": [
+      {
+        "uuid": "a6276400-9e2b-48c7-af57-7b799e83b4c1",
+        "truckName": "Danger",
+        "burnRates": [
+          { "speed": 0, "mpg": 50 },
+          { "speed": 10, "mpg": 40 },
+          { "speed": 20, "mpg": 40 },
+          { "speed": 30, "mpg": 39 },
+          { "speed": 40, "mpg": 30 },
+          { "speed": 50, "mpg": 25 }
+        ]
+      },
+      {
+        "uuid": "a6276400-9e2b-48c7-af57-7b799e83b4c2",
+        "truckName": "Tommy",
+        "burnRates": [
+          { "speed": 0, "mpg": 50 },
+          { "speed": 10, "mpg": 40 },
+          { "speed": 20, "mpg": 40 },
+          { "speed": 30, "mpg": 39 },
+          { "speed": 40, "mpg": 30 },
+          { "speed": 50, "mpg": 25 }
+        ]
+      }
+    ]
+  }
+]

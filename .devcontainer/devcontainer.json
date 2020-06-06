@@ -1,0 +1,16 @@
+{
+  "name": "Node.js 12:18",
+  "dockerFile": "Dockerfile",
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/zsh"
+  },
+  "extensions": [
+    "dbaeumer.vscode-eslint",
+    "dsznajder.es7-react-js-snippets",
+    "editorconfig.editorconfig",
+    "esbenp.prettier-vscode"
+  ],
+  "forwardPorts": [6107],
+  "postCreateCommand": "npm install",
+  "remoteUser": "node"
+}
