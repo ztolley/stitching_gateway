@@ -105,3 +105,12 @@ Or, though may cause issues as schemas grows
 There is a small number of tests that can be executed with `npm test`. These tests demonstrate queries that prove the 2 backend api's and test the required combined query
 
 How do you do it? All the docs on `delegateToSchema` assume you use a top legel query property and the field to use is at the top level too. How do you work with the need for more complex queries, nested parameters and nested field?
+
+# So what is the question?
+
+All the documentation and examples for `delegateToSchema` describe its use in simple scenarios in which you specify a field in the Query object and a single field in the response. In this case though fetching the data does not follow that, it needs a more specific query and parameters passed own into that, plus the data to pull back is a few layers deep.
+
+- Is it possible to join these two API's with `delegateToSchema`?
+- Is there some form of transformation that could make it possible?
+- Is there some form of use of fragments that could help?
+- Does the API gate have to generate the query to use with the little information it has within the stitching resolver?
