@@ -7,8 +7,13 @@
   "extensions": [
     "dbaeumer.vscode-eslint",
     "dsznajder.es7-react-js-snippets",
+    "eamodio.gitlens",
     "editorconfig.editorconfig",
-    "esbenp.prettier-vscode"
+    "esbenp.prettier-vscode",
+    "firsttris.vscode-jest-runner",
+    "github.vscode-pull-request-github",
+    "ms-vscode.azure-account",
+    "ms-vsliveshare.vsliveshare"
   ],
   "forwardPorts": [6107],
   "postCreateCommand": "npm install",
