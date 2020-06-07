@@ -4,7 +4,7 @@ const { ApolloServer } = require('apollo-server-express')
 
 const { getSchema } = require('./graphql')
 
-const port = process.env.SERVER_PORT || 6107
+const port = process.env.PORT || 6107
 
 async function run() {
   const schema = await getSchema()
