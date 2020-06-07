@@ -20,7 +20,7 @@ async function run() {
 
   const app = express()
 
-  server.applyMiddleware({ app })
+  server.applyMiddleware({ app, path: '/' })
   app.listen(port, () => {
     console.log(`🚀 API Gateway Server ready at ${port}`)
   })
