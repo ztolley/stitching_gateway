@@ -14,7 +14,7 @@ async function run() {
       headers: req.headers,
     }),
     introspection: true,
-    playground: process.env.GRAPHQL_PLAYGROUND,
+    playground: true,
     schema,
   })
 
