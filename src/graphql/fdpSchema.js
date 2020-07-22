@@ -39,14 +39,21 @@ const resolvers = {
     },
   },
   FBRDataSource: {
-    fbrTruck: (parent, args) =>
-      args.truckId
+    fbrTruck: (parent, args) => {
+      const result = args.truckId
         ? parent.fbrTruck.filter((fbrTruck) => fbrTruck.uuid === args.truckId)
-        : parent.fbrTruck,
+        : parent.fbrTruck
+
+      console.log('Result', JSON.stringify(result, null, 2))
+
+      return result
+    },
   },
   Query: {
-    dataSources: (_, { dataType }) =>
-      data.filter((dataItem) => dataItem.dataType === dataType),
+    dataSources: (_, { dataType }) => {
+      console.log('Datasources')
+      return data.filter((dataItem) => dataItem.dataType === dataType)
+    },
   },
 }
 
