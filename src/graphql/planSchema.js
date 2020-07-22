@@ -6,7 +6,7 @@ const typeDefs = `
   scalar DateTime
   scalar Number
 
-  type Truck {
+  type FBRTruck {
     id: String
     truckParticipations: [TruckParticipation!]
   }
@@ -25,7 +25,7 @@ const typeDefs = `
     startDate: DateTime!
     endDate: DateTime!
     timeZoneOffset: Number
-    trucks: [Truck]
+    trucks: [FBRTruck]
   }
 
   type Query {
