@@ -1,4 +1,4 @@
-FROM node:12.18.0
+FROM node:12.18.2
 
 ARG USERNAME=node
 ARG USER_UID=1000
@@ -25,7 +25,7 @@ RUN apt-get update \
     && /bin/bash /tmp/common-setup.sh "$INSTALL_ZSH" "$USERNAME" "$USER_UID" "$USER_GID" \
     && rm /tmp/common-setup.sh \
     #
-    # Remove outdated yarn from /opt and install via package 
+    # Remove outdated yarn from /opt and install via package
     # so it can be easily updated via apt-get upgrade yarn
     && rm -rf /opt/yarn-* \
     && rm -f /usr/local/bin/yarn \
