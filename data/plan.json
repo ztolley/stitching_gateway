@@ -8,7 +8,7 @@
       "timeZoneOffset": 0,
       "trucks": [
         {
-          "id": "a6276400-9e2b-48c7-af57-7b799e83b4c1",
+          "uuid": "a6276400-9e2b-48c7-af57-7b799e83b4c1",
           "truckParticipations": [
             {
               "id": "c6276400-9e2b-48c7-af57-7b799e83b4c1",

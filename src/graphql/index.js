@@ -12,61 +12,71 @@ async function getSchema() {
       {
         schema: planSchema,
         merge: {
-          FBRTruck: (originalResult, context, info, schema, selectionSet) =>
-            delegateToSchema({
-              schema,
-              operation: 'query',
-              fieldName: 'dataSources',
-              returnType: getNamedType(info.returnType),
-              args: { dataType: 'Fbr' },
-              selectionSet: {
-                kind: Kind.SELECTION_SET,
-                selections: [
-                  {
-                    kind: Kind.INLINE_FRAGMENT,
-                    typeCondition: {
-                      kind: Kind.NAMED_TYPE,
-                      name: {
-                        kind: Kind.NAME,
-                        value: 'FBRDataSource',
+          FBRTruck: {
+            selectionSet: `{ uuid }`,
+            resolve: (originalResult, context, info, schema, selectionSet) => {
+              console.log(
+                'AT LEAST I AM IN THE RESOLVER',
+                selectionSet,
+                originalResult
+              )
+              return delegateToSchema({
+                schema,
+                operation: 'query',
+                fieldName: 'dataSources',
+                returnType: getNamedType(info.returnType),
+                args: { dataType: 'Fbr' },
+                selectionSet: {
+                  kind: Kind.SELECTION_SET,
+                  selections: [
+                    {
+                      kind: Kind.INLINE_FRAGMENT,
+                      typeCondition: {
+                        kind: Kind.NAMED_TYPE,
+                        name: {
+                          kind: Kind.NAME,
+                          value: 'FBRDataSource',
+                        },
+                      },
+                      selectionSet: {
+                        kind: Kind.SELECTION_SET,
+                        selections: [
+                          {
+                            kind: Kind.FIELD,
+                            name: {
+                              kind: Kind.NAME,
+                              value: 'fbrTruck',
+                            },
+                            arguments: [
+                              {
+                                kind: Kind.ARGUMENT,
+                                name: {
+                                  kind: Kind.NAME,
+                                  value: 'truckId',
+                                },
+                                value: {
+                                  kind: Kind.STRING,
+                                  value: originalResult.uuid,
+                                },
+                              },
+                            ],
+                            selectionSet,
+                          },
+                        ],
                       },
                     },
-                    selectionSet: {
-                      kind: Kind.SELECTION_SET,
-                      selections: [
-                        {
-                          kind: Kind.FIELD,
-                          name: {
-                            kind: Kind.NAME,
-                            value: 'fbrTruck',
-                          },
-                          arguments: [
-                            {
-                              kind: Kind.ARGUMENT,
-                              name: {
-                                kind: Kind.NAME,
-                                value: 'truckId',
-                              },
-                              value: {
-                                kind: Kind.STRING,
-                                value: originalResult.id,
-                              },
-                            },
-                          ],
-                          selectionSet,
-                        },
-                      ],
-                    },
-                  },
-                ],
-              },
-              context,
-              info,
-              skipTypeMerging: true,
-            }),
+                  ],
+                },
+                context,
+                info,
+                skipTypeMerging: true,
+              })
+            },
+          },
         },
       },
     ],
+    mergeTypes: true,
   })
 }
 

@@ -7,7 +7,7 @@ const typeDefs = `
   scalar Number
 
   type FBRTruck {
-    id: String
+    uuid: ID!
     truckParticipations: [TruckParticipation!]
   }
 
