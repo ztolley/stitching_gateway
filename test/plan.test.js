@@ -18,7 +18,7 @@ describe('Plan Schema', () => {
             id
             name
             trucks {
-              id
+              uuid
               truckParticipations {
                 joinDate
                 leaveDate
@@ -39,7 +39,7 @@ describe('Plan Schema', () => {
     it("should return a list of truck id's associated with the plan and their join/leave dates", () => {
       const truck = result.trucks[0]
 
-      expect(truck.id).toEqual('a6276400-9e2b-48c7-af57-7b799e83b4c1')
+      expect(truck.uuid).toEqual('a6276400-9e2b-48c7-af57-7b799e83b4c1')
       expect(truck.truckParticipations[0].joinDate).toEqual(
         '2020-10-01T17:08:49.000-0430'
       )

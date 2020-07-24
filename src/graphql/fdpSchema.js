@@ -44,14 +44,11 @@ const resolvers = {
         ? parent.fbrTruck.filter((fbrTruck) => fbrTruck.uuid === args.truckId)
         : parent.fbrTruck
 
-      console.log('Result', JSON.stringify(result, null, 2))
-
       return result
     },
   },
   Query: {
     dataSources: (_, { dataType }) => {
-      console.log('Datasources')
       return data.filter((dataItem) => dataItem.dataType === dataType)
     },
   },
