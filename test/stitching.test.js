@@ -18,12 +18,10 @@ describe('Gateway', () => {
             id
             name
             trucks {
-              fbrTruck {
-                truckName
-                burnRates {
-                  speed
-                  mpg
-                }
+              truckName
+              burnRates {
+                speed
+                mpg
               }
               truckParticipations {
                 joinDate
@@ -35,6 +33,8 @@ describe('Gateway', () => {
       `
 
       const response = await graphql(schema, query)
+
+      console.log(response.errors);
 
       result = response.data.getPlanById
     })

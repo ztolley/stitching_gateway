@@ -31,6 +31,7 @@ const typeDefs = `
   type Query {
     listPlans: [Plan]
     getPlanById(id: String!): Plan
+    getTruckById(uuid: ID!): FBRTruck
   }
 `
 
@@ -38,6 +39,7 @@ const resolvers = {
   Query: {
     listPlans: () => data.plans,
     getPlanById: (_, args) => data.plans.find((plan) => plan.id === args.id),
+    getTruckById: (_, args) => data.trucks.find((truck) => truck.uuid === args.uuid),
   },
 }
 
