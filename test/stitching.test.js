@@ -34,18 +34,16 @@ describe('Gateway', () => {
 
       const response = await graphql(schema, query)
 
-      console.log(response.errors);
-
       result = response.data.getPlanById
     })
 
     it('should return the name of a truck', () => {
-      const fbrTruck = result.trucks[0].fbrTruck
+      const fbrTruck = result.trucks[0]
       expect(fbrTruck.truckName).toEqual('Danger')
     })
 
     it('should return the mpg data for the truck', () => {
-      const fbrTruck = result.trucks[0].fbrTruck
+      const fbrTruck = result.trucks[0]
       expect(fbrTruck.burnRates[0].mpg).toEqual(50)
     })
   })
