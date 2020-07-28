@@ -1,10 +1,13 @@
 const { stitchSchemas } = require('@graphql-tools/stitch')
 const { delegateToSchema, handleResult } = require('@graphql-tools/delegate')
 const { getErrors } = require('@graphql-tools/utils')
-const { Kind, GraphQLList } = require('graphql')
+const { Kind, GraphQLList, getNamedType } = require('graphql')
 
 const fdpSchema = require('./fdpSchema')
 const planSchema = require('./planSchema')
+
+const fbrDataSourceListType = new GraphQLList(fdpSchema.getType('FBRDataSource'))
+const fbrTruckListType = new GraphQLList(fdpSchema.getType('FBRTruck'))
 
 function forwardToFbr(truckId, selectionSet) {
   return {
@@ -72,7 +75,7 @@ async function getSchema() {
                 schema,
                 operation: 'query',
                 fieldName: 'dataSources',
-                returnType: new GraphQLList(fdpSchema.getType('FBRDataSource')),
+                returnType: fbrDataSourceListType,
                 args: { dataType: 'Fbr' },
                 selectionSet: forwardToFbr(originalResult.uuid, selectionSet),
                 context,
@@ -91,7 +94,7 @@ async function getSchema() {
                 schema,
                 context,
                 info,
-                new GraphQLList(fdpSchema.getType('FBRTruck')),
+                fbrTruckListType,
                 true,
               );
 
