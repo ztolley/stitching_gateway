@@ -16,7 +16,7 @@ describe('FDP Schema', () => {
         query Trucks {
           dataSources(dataType: Fbr) {
             ... on FBRDataSource {
-              fbrTruck(truckId: "a6276400-9e2b-48c7-af57-7b799e83b4c1") {
+              fbrTruck {
                 uuid
                 truckName
               }

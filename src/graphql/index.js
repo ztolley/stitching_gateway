@@ -1,11 +1,57 @@
 const { stitchSchemas } = require('@graphql-tools/stitch')
-const { delegateToSchema } = require('@graphql-tools/delegate')
-const { RenameObjectFields } = require('@graphql-tools/wrap')
-const { getNamedType, Kind, print } = require('graphql')
+const { delegateToSchema, handleResult } = require('@graphql-tools/delegate')
+const { getErrors } = require('@graphql-tools/utils')
+const { Kind, GraphQLList, getNamedType } = require('graphql')
 
 const fdpSchema = require('./fdpSchema')
 const planSchema = require('./planSchema')
 
+const fbrDataSourceListType = new GraphQLList(fdpSchema.getType('FBRDataSource'))
+const fbrTruckListType = new GraphQLList(fdpSchema.getType('FBRTruck'))
+
+function forwardToFbr(truckId, selectionSet) {
+  return {
+    kind: Kind.SELECTION_SET,
+    selections: [
+      {
+        kind: Kind.INLINE_FRAGMENT,
+        typeCondition: {
+          kind: Kind.NAMED_TYPE,
+          name: {
+            kind: Kind.NAME,
+            value: 'FBRDataSource',
+          },
+        },
+        selectionSet: {
+          kind: Kind.SELECTION_SET,
+          selections: [
+            {
+              kind: Kind.FIELD,
+              name: {
+                kind: Kind.NAME,
+                value: 'fbrTruck',
+              },
+              arguments: [
+                {
+                  kind: Kind.ARGUMENT,
+                  name: {
+                    kind: Kind.NAME,
+                    value: 'truckId',
+                  },
+                  value: {
+                    kind: Kind.STRING,
+                    value: truckId,
+                  },
+                },
+              ],
+              selectionSet,
+            },
+          ],
+        },
+      },
+    ],
+  }
+}
 async function getSchema() {
   return stitchSchemas({
     subschemas: [
@@ -25,98 +71,38 @@ async function getSchema() {
           FBRTruck: {
             selectionSet: `{ uuid }`,
             resolve: (originalResult, context, info, schema, selectionSet) => {
-              console.log(print({
-                kind: Kind.SELECTION_SET,
-                selections: [
-                  {
-                    kind: Kind.INLINE_FRAGMENT,
-                    typeCondition: {
-                      kind: Kind.NAMED_TYPE,
-                      name: {
-                        kind: Kind.NAME,
-                        value: 'FBRDataSource',
-                      },
-                    },
-                    selectionSet: {
-                      kind: Kind.SELECTION_SET,
-                      selections: [
-                        {
-                          kind: Kind.FIELD,
-                          name: {
-                            kind: Kind.NAME,
-                            value: 'fbrTruck',
-                          },
-                          arguments: [
-                            {
-                              kind: Kind.ARGUMENT,
-                              name: {
-                                kind: Kind.NAME,
-                                value: 'truckId',
-                              },
-                              value: {
-                                kind: Kind.STRING,
-                                value: originalResult.uuid,
-                              },
-                            },
-                          ],
-                          selectionSet,
-                        },
-                      ],
-                    },
-                  },
-                ],
-              }))
-              return delegateToSchema({
+              const datasources = delegateToSchema({
                 schema,
                 operation: 'query',
                 fieldName: 'dataSources',
-                returnType: getNamedType(info.returnType),
+                returnType: fbrDataSourceListType,
                 args: { dataType: 'Fbr' },
-                selectionSet: {
-                  kind: Kind.SELECTION_SET,
-                  selections: [
-                    {
-                      kind: Kind.INLINE_FRAGMENT,
-                      typeCondition: {
-                        kind: Kind.NAMED_TYPE,
-                        name: {
-                          kind: Kind.NAME,
-                          value: 'FBRDataSource',
-                        },
-                      },
-                      selectionSet: {
-                        kind: Kind.SELECTION_SET,
-                        selections: [
-                          {
-                            kind: Kind.FIELD,
-                            name: {
-                              kind: Kind.NAME,
-                              value: 'fbrTruck',
-                            },
-                            arguments: [
-                              {
-                                kind: Kind.ARGUMENT,
-                                name: {
-                                  kind: Kind.NAME,
-                                  value: 'truckId',
-                                },
-                                value: {
-                                  kind: Kind.STRING,
-                                  value: originalResult.uuid,
-                                },
-                              },
-                            ],
-                            selectionSet,
-                          },
-                        ],
-                      },
-                    },
-                  ],
-                },
+                selectionSet: forwardToFbr(originalResult.uuid, selectionSet),
                 context,
                 info,
                 skipTypeMerging: true,
               })
+              
+              if (!Array.isArray(datasources)) {
+                return datasources
+              }
+
+              const datasource = datasources[0]
+              const fbrTrucks = handleResult(
+                datasource.fbrTruck,
+                getErrors(datasource, 'fbrTruck'),
+                schema,
+                context,
+                info,
+                fbrTruckListType,
+                true,
+              );
+
+              if (!Array.isArray(fbrTrucks)) {
+                return fbrTrucks
+              }
+
+              return fbrTrucks[0];
             },
           },
         },
